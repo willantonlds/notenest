@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euo pipefail
+
+msg_file="$1"
+subject=$(head -1 "$msg_file")
+
+# allow auto-generated merge/revert commits through
+case "$subject" in
+  "Merge "*|"Revert "*) exit 0 ;;
+esac
+
+fail() { echo "============================================================"; echo " ERROR: $1"; echo "============================================================"; exit 1; }
+
+# 1) subject format: <type>(scope)?: summary
+if ! [[ "$subject" =~ ^(feat|fix|redo|docs|test|chore|perf|vuls)(\([a-z0-9:_-]+\))?:\ .+ ]]; then
+  fail "subject must be '<type>: <summary>' (types: feat fix redo docs test chore perf vuls)."
+fi
+
+# 2) subject <= 50 chars
+n=${#subject}
+if [ "$n" -gt 50 ]; then
+  fail "subject is $n chars; keep it at or under 50. Move detail to the body:
+   git commit -m \"<title>\" -m \"<body, can be long>\""
+fi
+
+# 3) no trailing period on the subject
+if [[ "$subject" =~ \.$ ]]; then
+  fail "no trailing period on the subject."
+fi
+
+# 4) reference an issue in the message body (keeps commits linked)
+if ! grep -qiE '(closes|fixes|resolves|refs|issue) #[0-9]+' "$msg_file"; then
+  fail "reference an issue in the body, for example 'Refs #12' or 'Closes #12'."
+fi
+
+exit 0
