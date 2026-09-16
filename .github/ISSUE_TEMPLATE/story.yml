@@ -1,0 +1,27 @@
+name: User Story
+description: A unit of user value (Jira-style story).
+title: "<short story title>"
+labels: [story]
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: Story
+      description: As a <role>, I want <goal>, so that <benefit>.
+      placeholder: As a member, I want to search my notes, so that I find them fast.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Observable outcomes, as a checklist or Given / When / Then.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [access, notes, share, moderation]
+    validations:
+      required: true
