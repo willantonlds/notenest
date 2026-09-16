@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Block files over the hard line limit before any push.
+bash "$ROOT_DIR/scripts/check-file-length.sh"
+
+current_branch=$(git symbolic-ref HEAD)
+
+if [ "${ALLOW_MAIN_PUSH:-0}" = "1" ]; then
+    exit 0
+fi
+
+if [ "$current_branch" = "refs/heads/master" ] || [ "$current_branch" = "refs/heads/main" ]; then
+    echo "============================================================"
+    echo " ERROR: Direct pushes to master are blocked."
+    echo " Use a feature branch and open a pull request."
+    echo " For a one time bootstrap push, run with ALLOW_MAIN_PUSH=1."
+    echo "============================================================"
+    exit 1
+fi
+
+exit 0
