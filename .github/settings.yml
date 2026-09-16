@@ -1,0 +1,102 @@
+# .github/settings.yml
+# Managed by the Probot "Settings" GitHub App: https://probot.github.io/apps/settings/
+# Changes sync to GitHub when this file is merged into the default branch.
+
+repository:
+  description: "NoteNest, a notetaking app for university students. TypeScript, TDD, Agile Scrum."
+  topics: typescript, notes, agile, scrum, vitest, education
+  has_issues: true
+  has_projects: true
+  has_wiki: true
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: false
+  delete_branch_on_merge: true
+  allow_update_branch: true
+  squash_merge_commit_title: PR_TITLE
+  squash_merge_commit_message: BLANK
+  default_branch: master
+
+branches:
+  - name: master
+    protection:
+      # Reviewer model: 1 approval required; enforce_admins false lets the solo
+      # admin bypass. On the public deliverable the professor and peer mentor
+      # are the real reviewers.
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_last_push_approval: true
+      enforce_admins: false
+      allow_force_pushes: false
+      allow_deletions: false
+      required_conversation_resolution: true
+      required_status_checks:
+        strict: true
+        contexts:
+          - "Lint, type-check, test"
+      restrictions: null
+
+labels:
+  - name: "story"
+    color: "0E8A16"
+    description: "A unit of user value in the product backlog."
+  - name: "task"
+    color: "BFDADC"
+    description: "An implementation step under a story."
+  - name: "area:access"
+    color: "1D76DB"
+    description: "Account and access features."
+  - name: "area:notes"
+    color: "0052CC"
+    description: "Note management features."
+  - name: "area:share"
+    color: "B60205"
+    description: "Sharing and discovery features."
+  - name: "area:moderation"
+    color: "D93F0B"
+    description: "Moderation features."
+  - name: "feat"
+    color: "1F883D"
+    description: ":sparkles: New feature that adds functionality."
+  - name: "fix"
+    color: "D1242F"
+    description: ":bug: Bug fix for incorrect behavior."
+  - name: "redo"
+    color: "8250DF"
+    description: ":recycle: Structural refactor without changing intended behavior."
+  - name: "docs"
+    color: "0969DA"
+    description: ":memo: Documentation change (code, wiki, or design)."
+  - name: "test"
+    color: "1A7F37"
+    description: ":test_tube: Testing work (unit, integration, acceptance)."
+  - name: "chore"
+    color: "9A6700"
+    description: ":broom: Maintenance, setup, pipelines, or dependencies."
+  - name: "perf"
+    color: "6639BA"
+    description: ":stopwatch: Performance or optimization change."
+  - name: "vuls"
+    color: "A40E26"
+    description: ":shield: Security or vulnerability hardening."
+  - name: "bug"
+    color: "EE0701"
+    description: "Something is not working."
+  - name: "enhancement"
+    color: "A2EEEF"
+    description: "Improvement to an existing feature."
+  - name: "presentation"
+    color: "FBCA04"
+    description: "Team project presentation milestone."
+
+milestones:
+  - title: "v0.1 Core"
+    description: "A usable notes app: register, log in, create, view, edit, delete."
+    state: open
+  - title: "v0.2 Sharing"
+    description: "Share notes to a moderated public study feed."
+    state: open
+  - title: "v0.3 Organization"
+    description: "Organize and find notes: profile, tags, search, filter, course grouping."
+    state: open
