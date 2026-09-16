@@ -1,24 +1,22 @@
 # NoteNest
 
-A simple, focused note-taking web app for university students.
+A notetaking web app for university students. Members write notes and share them to a public study feed; Moderators keep the feed clean.
 
-Course project for CEN3031 (Intro to Software Engineering), Fall 2026.
+## For graders: start here
+- [Grader tour](docs/for-graders.md): where each graded item lives.
+- [Product](docs/product.md) . [Architecture](docs/architecture.md) . [Process and board](docs/process.md)
 
-## Planned features
-- Sign up / log in with two user roles: **Member** and **Moderator**
-- Create, edit, and delete personal notes
-- Tag and search notes
-- Share notes to a public feed; moderators can hide inappropriate public notes
+## For contributors
+- [Contributing](CONTRIBUTING.md) . [Code standards](docs/code-standards.md) . [Testing](docs/testing.md) . [Operations](docs/operations.md)
 
-## Tech stack
-- Frontend: React + TypeScript (Vite)
-- Backend: Node.js + Express + TypeScript
-- Database: SQLite (development)
+## Stack
+React and TypeScript front end, Node and Express API, Prisma over PostgreSQL, tested with Vitest, built with Docker, deployed to Fly.io. Details in [architecture](docs/architecture.md).
 
-## Engineering standards
-- Test-driven development (Vitest); SOLID design
-- Files <= 100 lines; 80-column formatting; cyclomatic complexity <= 6
-- CI (GitHub Actions): lint + type-check + tests on every pull request
+## Quickstart
+Requires Docker and pnpm (through corepack).
 
-## License
-MIT
+```
+corepack enable
+make up        # start the app and Postgres in Docker
+make verify    # lint, type check, unit and integration tests
+```
