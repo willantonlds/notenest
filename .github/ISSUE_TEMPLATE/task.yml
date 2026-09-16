@@ -1,0 +1,20 @@
+name: Task
+description: An implementation step under a story.
+title: "<short task title>"
+labels: [task]
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Parent story
+      description: The story issue this task belongs to, for example #12.
+  - type: textarea
+    id: work
+    attributes:
+      label: What needs doing
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of done
