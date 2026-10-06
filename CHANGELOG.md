@@ -4,13 +4,19 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #24 | feat | Add core PostgreSQL persistence
+
+- Add PostgreSQL-backed Prisma models, constraints, migrations, indexes, and isolated database verification.
+
 ### Issue #23 | docs | Review Sprint 1 work scope
 
 - Record the approved 14-PBI Week 1 selection, estimates, prerequisites, and
   acceptance limits without replacing existing product or architecture decisions.
 
 ## Versioning
+
 Pre-1.0 semantic versioning, `v<major>.<minor>.<patch>`:
+
 - Major (`0`): initial development; breaking changes allowed. A major bump means a breaking change that needs a migration.
 - Minor: a completed milestone. `v0.1.0` when v0.1 Core is done, `v0.2.0` when v0.2 Sharing is done, `v0.3.0` when v0.3 Organization is done.
 - Patch: each merged pull request while working toward the next milestone (`v0.0.1`, `v0.0.2`, ...).
