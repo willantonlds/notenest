@@ -7,6 +7,7 @@ One entry per issue, pull request, and released version. Newest first.
 ### Issue #24 | feat | Add core PostgreSQL persistence
 
 - Add PostgreSQL-backed Prisma models, constraints, migrations, indexes, and isolated database verification.
+- Generate Prisma Client explicitly before CI checks, including cached installs.
 
 ### Issue #23 | docs | Review Sprint 1 work scope
 
