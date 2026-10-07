@@ -4,6 +4,10 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #25 | feat | Bootstrap app and API shell
+
+- Add the responsive public React shell and Express database health endpoint.
+
 ### Issue #24 | feat | Add core PostgreSQL persistence
 
 - Add PostgreSQL-backed Prisma models, constraints, migrations, indexes, and isolated database verification.

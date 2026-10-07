@@ -11,7 +11,7 @@ NoteNest is test-driven: tests are written first and prove each behavior.
 Vitest for unit and integration. Playwright for acceptance (planned for Sprint 2).
 
 ## Running
-`pnpm test` runs unit tests without a database. Set `TEST_DATABASE_URL` to an isolated PostgreSQL database named `notenest_test` and run `pnpm run test:integration`. The command validates the URL, applies migrations, and runs database tests without deleting fixture data. See [operations](operations.md) for CI.
+`pnpm test` runs unit tests without a database. For integration tests, run `pnpm run build` first because the smoke test serves the built public shell. Set `TEST_DATABASE_URL` to an isolated PostgreSQL database named `notenest_test` and run `pnpm run test:integration`. The command validates the URL, applies migrations, and runs database tests without deleting fixture data. See [operations](operations.md) for CI.
 
 ## Coverage
 Cover every service and route with meaningful behavior tests. A change is not done until its tests pass in CI.
