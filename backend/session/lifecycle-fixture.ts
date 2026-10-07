@@ -3,10 +3,11 @@ import type { AddressInfo } from 'node:net';
 import { PrismaClient } from '@prisma/client';
 import { afterAll, beforeAll } from 'vitest';
 import { createTestSessionApp } from './test-session-app';
+import { cleanupSessionFixture, fixtureUser } from './lifecycle-resources';
 
 export const db = new PrismaClient();
 export const userId = crypto.randomUUID();
-let server: Server;
+let server: Server | undefined;
 let base = '';
 const sessionIds: string[] = [];
 
@@ -15,31 +16,17 @@ export function useSessionFixture(): void {
   beforeAll(async () => {
     await db.user.upsert({
       where: { id: userId },
-      create: {
-        id: userId,
-        displayName: 'Session test',
-        email: 'session-test@example.invalid',
-        passwordHash: 'test-hash',
-      },
+      create: fixtureUser(userId),
       update: {},
     });
-    server = createServer(createTestSessionApp(db, userId));
+    const httpServer = createServer(createTestSessionApp(db, userId));
+    server = httpServer;
     await new Promise<void>((resolve) =>
-      server.listen(0, '127.0.0.1', resolve),
+      httpServer.listen(0, '127.0.0.1', resolve),
     );
-    base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+    base = `http://127.0.0.1:${(httpServer.address() as AddressInfo).port}`;
   });
-  afterAll(async () => {
-    await new Promise<void>((resolve, reject) =>
-      server.close((error) => (error ? reject(error) : resolve())),
-    );
-    await db.session.deleteMany({ where: { userId } });
-    await db.sessionRevocation.deleteMany({
-      where: { id: { in: sessionIds } },
-    });
-    await db.user.deleteMany({ where: { id: userId } });
-    await db.$disconnect();
-  });
+  afterAll(() => cleanupSessionFixture(db, userId, sessionIds, server));
 }
 
 /** Send a request to an isolated test-only session endpoint. */
