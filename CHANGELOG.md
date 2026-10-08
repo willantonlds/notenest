@@ -4,6 +4,12 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #27 | feat | Enforce request and access protection
+
+- Resolve the current account role from PostgreSQL and enforce owner/public visibility predicates.
+- Add signed CSRF tokens, exact-Origin JSON write checks, and a 64 KB body limit.
+- Return generic internal errors without logging request or session contents.
+
 ### Issue #26 | feat | Persist PostgreSQL sessions
 
 - Persist session lifecycle with bounded idle and absolute expiry.
