@@ -1,0 +1,18 @@
+form {
+  display: grid;
+  gap: 10px;
+  max-width: 420px;
+}
+input,
+button {
+  font: inherit;
+  padding: 10px;
+  border: 1px solid #9aa9a1;
+  border-radius: 6px;
+}
+input:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #245c4c;
+  outline-offset: 3px;
+}

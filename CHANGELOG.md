@@ -4,6 +4,12 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #1 | feat | Register an account
+
+- Validate registration fields, normalize email, and persist bcrypt password hashes only; return a safe account DTO and establish a MEMBER server session.
+- Add accessible registration feedback and redirect successful registrations to `/notes`.
+- `/notes` is an empty placeholder only. Notes behavior and full notes acceptance remain pending S06-B.
+
 ### Issue #28 | chore | Extend application quality and CI gates
 
 - Add shared source-format, length, complexity, strict type, unit, PostgreSQL integration, and real Chromium checks.
