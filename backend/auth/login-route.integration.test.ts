@@ -1,16 +1,18 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import { PrismaClient } from '@prisma/client';
 import {
+  authTestBase,
   cleanupTestUser,
+  createAuthTestServer,
   shutdownAuthTestServer,
-  startAuthTestServer,
 } from './auth-test-support';
 
 const db = new PrismaClient();
-const { server, base } = startAuthTestServer(db);
+const server = createAuthTestServer(db);
 afterAll(() => shutdownAuthTestServer(server, db));
 describe('login API', () => {
   it('keeps errors generic and persists a safe authenticated session', async () => {
+    const base = authTestBase(server);
     const csrf = await fetch(`${base}/api/csrf`);
     const token = ((await csrf.json()) as { csrfToken: string }).csrfToken;
     const cookie = csrf.headers
