@@ -8,16 +8,18 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "format": "prettier --check .",
-    "typecheck": "tsc --noEmit && tsc -p backend/tsconfig.json && tsc -p frontend/tsconfig.json",
+    "format": "prettier --check \".github/workflows/ci.yml\" \"backend/**/*.ts\" \"frontend/src/**/*.{ts,tsx,css}\" \"frontend/index.html\" \"scripts/*.{js,mjs,cjs}\" \"src/**/*.ts\" \"tests/**/*.ts\" \"tests/tsconfig.json\" \"*.{ts,js}\" \"package.json\"",
+    "typecheck": "tsc --noEmit && tsc -p backend/tsconfig.json && tsc -p frontend/tsconfig.json && tsc -p tests/tsconfig.json",
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:test": "pnpm run test:integration",
     "test:integration": "node scripts/run-integration-tests.mjs",
     "dev": "concurrently \"vite --config vite.config.ts --host 127.0.0.1\" \"tsx watch backend/server.ts\"",
-    "build": "vite build && tsc -p backend/tsconfig.json && tsc -p frontend/tsconfig.json && esbuild backend/server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js",
-    "start": "node dist/server.js"
+    "build": "bash scripts/build.sh",
+    "start": "node dist/server.js",
+    "verify": "bash scripts/verify.sh",
+    "test:browser": "playwright test"
   },
   "devDependencies": {
     "@types/node": "^24",
@@ -27,6 +29,7 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.13.0",
     "vitest": "^2.1.4",
+    "@playwright/test": "^1.64.1",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
     "@types/react": "^19.1.6",
