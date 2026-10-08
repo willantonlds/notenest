@@ -40,6 +40,7 @@
   "packageManager": "pnpm@9.15.9",
   "dependencies": {
     "@prisma/client": "^6.19.0",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "react": "^19.1.0",
