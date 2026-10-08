@@ -26,7 +26,13 @@ test('login persists the session and exposes only safe profile data', async ({
     await expect(page.getByRole('status')).toContainText('session expired');
     await page.getByLabel('Email').fill(email);
     await page.getByLabel('Password').fill(password);
+    const loginResponsePromise = page.waitForResponse((response) =>
+      response.url().endsWith('/api/auth/login'),
+    );
     await page.getByRole('button', { name: 'Log in' }).click();
+    const loginResponse = await loginResponsePromise;
+    expect(loginResponse.status()).toBe(200);
+    expect((await page.request.get('/api/auth/me')).status()).toBe(200);
     await expect(page).toHaveURL(/\/notes$/);
     await page.reload();
     const me = await page.request.get('/api/auth/me');
