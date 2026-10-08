@@ -5,6 +5,7 @@ import { errorHandler } from './errors';
 import { createRoutes } from './routes/health';
 import { registrationRoute } from './auth/register-route';
 import { loginRoute } from './auth/login-route';
+import { logoutRoute } from './auth/logout-route';
 import { createSessionMiddleware } from './session/middleware';
 import { currentUserMiddleware, protectWrites } from './security/middleware';
 import { issueCsrf } from './security/request-protection';
@@ -27,8 +28,15 @@ export function createApp(
   app.use('/api', protectWrites(csrfSecret));
   app.use('/api', registrationRoute(db));
   app.use('/api', loginRoute(db));
+  app.use('/api', logoutRoute());
   app.use('/api', createRoutes(db));
   app.use('/api', (_req, res) => res.status(404).json({ error: 'Not found' }));
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && req.get('accept')?.includes('text/html')) {
+      res.set('Cache-Control', 'no-store');
+    }
+    next();
+  });
   app.use(express.static(resolve(process.cwd(), 'dist/frontend')));
   app.get('*path', (_req, res, next) => {
     res.sendFile(
