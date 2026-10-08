@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 : "${TEST_DATABASE_URL:?Set TEST_DATABASE_URL to an isolated local notenest_test PostgreSQL database.}"
 export DATABASE_URL="$TEST_DATABASE_URL" HOST=127.0.0.1
+corepack pnpm run db:generate
 corepack pnpm run lint
 corepack pnpm run typecheck
 bash scripts/check-file-length.sh
