@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { errorHandler } from './errors';
 import { createRoutes } from './routes/health';
 import { registrationRoute } from './auth/register-route';
+import { loginRoute } from './auth/login-route';
 import { createSessionMiddleware } from './session/middleware';
 import { currentUserMiddleware, protectWrites } from './security/middleware';
 import { issueCsrf } from './security/request-protection';
@@ -25,6 +26,7 @@ export function createApp(
   app.use('/api', currentUserMiddleware(db));
   app.use('/api', protectWrites(csrfSecret));
   app.use('/api', registrationRoute(db));
+  app.use('/api', loginRoute(db));
   app.use('/api', createRoutes(db));
   app.use('/api', (_req, res) => res.status(404).json({ error: 'Not found' }));
   app.use(express.static(resolve(process.cwd(), 'dist/frontend')));
