@@ -1,16 +1,18 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import { PrismaClient } from '@prisma/client';
 import {
-  shutdownAuthTestServer,
+  authTestBase,
   cleanupTestUser,
-  startAuthTestServer,
+  createAuthTestServer,
+  shutdownAuthTestServer,
 } from './auth-test-support';
 import { cookieHeader, sessionId, sidCookie } from './test-helpers/logout';
 const db = new PrismaClient();
-const { server, base } = startAuthTestServer(db);
+const server = createAuthTestServer(db);
 afterAll(() => shutdownAuthTestServer(server, db));
 describe('logout API', () => {
   it('revokes only the current persistent session', async () => {
+    const base = authTestBase(server);
     const original = process.env.APP_ORIGIN;
     process.env.APP_ORIGIN = base;
     const email = `logout-${crypto.randomUUID()}@example.test`;
