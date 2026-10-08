@@ -23,15 +23,17 @@ enum ModerationAction {
 }
 
 model User {
-  id           String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  displayName  String            @map("display_name") @db.VarChar(80)
-  email        String            @unique @db.VarChar(254)
-  passwordHash String            @map("password_hash") @db.VarChar(255)
-  role         UserRole          @default(MEMBER)
-  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
-  sessions     Session[]
-  notes        Note[]
-  events       ModerationEvent[]
+  id            String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  displayName   String            @map("display_name") @db.VarChar(80)
+  email         String            @unique @db.VarChar(254)
+  passwordHash  String            @map("password_hash") @db.VarChar(255)
+  loginFailures Int               @default(0) @map("login_failures")
+  lockedUntil   DateTime?         @map("locked_until") @db.Timestamptz(6)
+  role          UserRole          @default(MEMBER)
+  createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  sessions      Session[]
+  notes         Note[]
+  events        ModerationEvent[]
 
   @@map("users")
 }
