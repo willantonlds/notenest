@@ -23,11 +23,15 @@ export function createUserMock() {
 }
 
 /** Start the real app on an ephemeral loopback port for auth integration tests. */
-export function startAuthTestServer(db: PrismaClient) {
-  const server = createApp(db).listen(0, '127.0.0.1');
+export function createAuthTestServer(db: PrismaClient) {
+  return createApp(db).listen(0, '127.0.0.1');
+}
+
+/** Read the ephemeral address after the test runner has started listening. */
+export function authTestBase(server: Server) {
   const address = server.address();
   if (!address || typeof address === 'string') throw new Error('No server.');
-  return { server, base: `http://127.0.0.1:${address.port}` };
+  return `http://127.0.0.1:${address.port}`;
 }
 
 /** Stop the ephemeral server and disconnect its database client. */

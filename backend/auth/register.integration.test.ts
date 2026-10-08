@@ -1,16 +1,18 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import { PrismaClient } from '@prisma/client';
 import {
-  shutdownAuthTestServer,
+  authTestBase,
   cleanupTestUser,
-  startAuthTestServer,
+  createAuthTestServer,
+  shutdownAuthTestServer,
 } from './auth-test-support';
 
 const db = new PrismaClient();
-const { server, base } = startAuthTestServer(db);
+const server = createAuthTestServer(db);
 afterAll(() => shutdownAuthTestServer(server, db));
 describe('registration API', () => {
   it('registers a member once and does not return password material', async () => {
+    const base = authTestBase(server);
     const csrfResponse = await fetch(`${base}/api/csrf`);
     const token = ((await csrfResponse.json()) as { csrfToken: string })
       .csrfToken;
