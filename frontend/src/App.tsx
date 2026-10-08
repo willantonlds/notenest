@@ -1,5 +1,6 @@
 import { Link, Route, Routes } from 'react-router-dom';
 import { RegisterPage } from './RegisterPage';
+import { LoginPage } from './LoginPage';
 
 /** Render the minimal public shell; feature routes are added in later issues. */
 export function App(): React.JSX.Element {
@@ -12,6 +13,7 @@ export function App(): React.JSX.Element {
         <span>Study, simply.</span>
       </header>
       <Routes>
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/notes"
@@ -38,7 +40,8 @@ export function App(): React.JSX.Element {
               </p>
               <p className="notice">Your study space is getting ready.</p>
               <p>
-                <Link to="/register">Create an account</Link>
+                <Link to="/register">Create an account</Link> ·{' '}
+                <Link to="/login">Log in</Link>
               </p>
             </section>
           }
