@@ -3,16 +3,18 @@ import tseslint from 'typescript-eslint';
 export default tseslint.config(
   { ignores: ['dist/', 'coverage/', 'node_modules/'] },
   {
-    files: ['src/**/*.ts'],
+    files: [
+      'src/**/*.{ts,tsx}',
+      'backend/**/*.ts',
+      'frontend/src/**/*.{ts,tsx}',
+      'tests/**/*.ts',
+      'scripts/*.{js,mjs,cjs}',
+    ],
     extends: [...tseslint.configs.recommended],
     rules: {
-      // Cyclomatic complexity: hard cap 6, so over 6 blocks. Aim for 5 or
-      // less; 6 is an occasional exception. One threshold per rule, so 5 is
-      // the documented target, not a second tool level.
+      // Six is the documented maximum cyclomatic complexity.
       complexity: ['error', 6],
-      // Warn over 80 lines here. The hard 100-line block is enforced by
-      // scripts/check-file-length.sh in the git hooks and CI, because an
-      // ESLint rule supports only one threshold per rule.
+      // The paired source-length script blocks files over 100 lines.
       'max-lines': ['warn', { max: 80 }],
     },
   },
