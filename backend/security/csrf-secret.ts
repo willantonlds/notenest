@@ -6,10 +6,15 @@ const developmentSecret = randomBytes(32).toString('hex');
 export function csrfSecret(env: NodeJS.ProcessEnv = process.env): string {
   const value = env.CSRF_SECRET ?? env.SESSION_SECRET;
   if (value && value.length >= 32) return value;
-  if (env.NODE_ENV === 'production' || env.NODE_ENV === 'staging') {
+  if (requiresExplicitSecret(env.NODE_ENV)) {
     throw new Error(
       'CSRF_SECRET or SESSION_SECRET must contain 32 characters.',
     );
   }
   return developmentSecret;
+}
+
+/** Deployed modes must reject weak fallback keys. */
+function requiresExplicitSecret(mode: string | undefined): boolean {
+  return mode === 'production' || mode === 'staging';
 }
