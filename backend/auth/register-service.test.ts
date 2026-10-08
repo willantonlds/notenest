@@ -3,23 +3,10 @@ import bcrypt from 'bcryptjs';
 import { register } from './register-service';
 import { RegistrationError, validateRegistration } from './register-validation';
 import { registrationMessage } from './register-route';
-
-const account = {
-  id: 'uuid',
-  displayName: 'Ada',
-  email: 'ada@example.com',
-  role: 'MEMBER' as const,
-};
+import { account, createUserMock } from './auth-test-support';
 describe('registration service', () => {
   it('normalizes email and stores a bcrypt hash, returning a safe DTO', async () => {
-    const create = vi.fn(
-      async (args: {
-        data: { passwordHash: string; role: string; email: string };
-      }) => {
-        void args;
-        return account;
-      },
-    );
+    const create = createUserMock();
     const result = await register({ user: { create } } as never, {
       displayName: ' Ada ',
       email: 'ADA@EXAMPLE.COM',
