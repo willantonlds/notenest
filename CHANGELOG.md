@@ -4,6 +4,12 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #2 | feat | Sign in
+
+- Authenticate with generic credential failures and persistent per-account lockout; establish a server session on successful login.
+- Add safe accessible login and session-expired feedback.
+- `/notes` remains an empty placeholder; notes behavior remains pending S06-B.
+
 ### Issue #1 | feat | Register an account
 
 - Validate registration fields, normalize email, and persist bcrypt password hashes only; return a safe account DTO and establish a MEMBER server session.
