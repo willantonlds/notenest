@@ -4,10 +4,16 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #26 | feat | Persist PostgreSQL sessions
+
+- Persist session lifecycle with bounded idle and absolute expiry.
+- Serialize SID changes and prevent stale writes from restoring revoked sessions.
+- Isolate lifecycle fixture email addresses and release resources after
+  setup or cleanup failures.
+
 ### Issue #25 | feat | Bootstrap app and API shell
 
 - Add the responsive public React shell and Express database health endpoint.
-- Clarify local verification and database integration test commands.
 
 ### Issue #24 | feat | Add core PostgreSQL persistence
 

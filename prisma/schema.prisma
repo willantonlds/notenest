@@ -49,6 +49,14 @@ model Session {
   @@map("sessions")
 }
 
+/// Retain indefinitely: stale store writes have no issuance timestamp for safe TTL cleanup.
+model SessionRevocation {
+  id        String   @id @db.VarChar(128)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("session_revocations")
+}
+
 model Note {
   id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   ownerId    String            @map("owner_id") @db.Uuid

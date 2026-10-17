@@ -1,0 +1,4 @@
+CREATE TABLE "session_revocations" (
+  "id" VARCHAR(128) PRIMARY KEY,
+  "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
