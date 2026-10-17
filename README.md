@@ -19,5 +19,7 @@ Requires Docker and pnpm (through corepack).
 corepack enable
 cp .env.example .env  # replace POSTGRES_PASSWORD with a local value
 make up        # start the app and Postgres in Docker
-make verify    # lint, type check, and unit tests
+make verify    # source quality, PostgreSQL, unit, and Chromium checks
 ```
+
+Before `make verify`, set `TEST_DATABASE_URL` to an isolated local PostgreSQL database named `notenest_test`.

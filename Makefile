@@ -1,4 +1,4 @@
-.PHONY: up down verify
+.PHONY: up down build verify
 
 up:
 	docker compose up --build -d
@@ -6,7 +6,8 @@ up:
 down:
 	docker compose down
 
+build:
+	bash scripts/build.sh
+
 verify:
-	corepack pnpm run lint
-	corepack pnpm run typecheck
-	corepack pnpm test
+	bash scripts/verify.sh

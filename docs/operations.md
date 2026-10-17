@@ -7,18 +7,18 @@ Requires Docker and pnpm (through corepack).
 ```
 corepack enable
 make up        # start the app and Postgres in Docker
-make verify    # lint, type check, and unit tests
+make verify    # source quality, PostgreSQL, unit, and Chromium checks
 make down      # stop the stack
 ```
 
-For database integration tests, set `TEST_DATABASE_URL` to an isolated `notenest_test` database, then run `pnpm run build && pnpm run test:integration`.
+`make verify` requires `TEST_DATABASE_URL` to target an isolated local PostgreSQL database named `notenest_test`. It runs the shared build, integration, and Chromium checks used by CI. To run only integration tests, set the same URL and run `pnpm run build && pnpm run test:integration`.
 
 ## Stage scripts (one behavior everywhere)
-- `scripts/verify.sh`: lint, type check, unit and integration tests. Needs `DATABASE_URL`.
+- `scripts/verify.sh`: lint, format, type, unit, PostgreSQL integration, and Chromium smoke. Requires dedicated `TEST_DATABASE_URL`.
 - `scripts/check-pr.sh "<title>" "<body>"`: validate the pull request or commit title and body.
 - `scripts/deploy.sh`: `flyctl deploy` (build, then release migrate). Needs Fly auth.
 - `scripts/acceptance.sh "<url>"`: post-deploy smoke suite against a URL.
-Shell, CI, and the Dockerfile all call these, so nothing reimplements the steps.
+Make and CI call the shared verification script. Make, pnpm, and Docker call the shared build script; environment variables supply database and server settings.
 
 ## Postgres (one knob: DATABASE_URL, same major version everywhere)
 - Local and CI: a Postgres container (docker compose locally, a service in CI).
@@ -26,7 +26,7 @@ Shell, CI, and the Dockerfile all call these, so nothing reimplements the steps.
 - Reach the real Fly database from your shell with `flyctl proxy 5432 -a notenest-db`.
 
 ## CI/CD workflows (thin wrappers over the scripts)
-- `ci.yml` (pull request): Node from `.nvmrc` + pnpm + a Postgres service; runs `check-pr.sh` then `verify.sh`, plus a separate build-only Docker job.
+- `ci.yml`: the required `Lint, type-check, test` job uses Node from `.nvmrc`, provisions PostgreSQL, installs Chromium, and runs `scripts/verify.sh`. Pull request and push triggers remain limited to `master`.
 - `deploy.yml` (push to master): runs `deploy.sh`.
 - `qa.yml` (after a successful deploy): runs `acceptance.sh` against the deployed URL.
 

@@ -4,7 +4,7 @@ RUN corepack enable
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
-RUN pnpm db:generate && pnpm build
+RUN bash scripts/build.sh
 ENV NODE_ENV=production
 EXPOSE 3000
 USER node

@@ -4,6 +4,12 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #28 | chore | Extend application quality and CI gates
+
+- Add shared source-format, length, complexity, strict type, unit, PostgreSQL integration, and real Chromium checks.
+- Provision a CI PostgreSQL service and use shared build and verification scripts.
+- Browser checks cover only the accessible responsive public shell and health endpoint; no authentication or feature flow is included.
+
 ### Issue #27 | feat | Enforce request and access protection
 
 - Resolve the current account role from PostgreSQL and enforce owner/public visibility predicates.

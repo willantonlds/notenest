@@ -3,11 +3,9 @@ import type { PrismaClient, UserRole } from '@prisma/client';
 import { resolveCurrentUser } from './current-user';
 import { validWriteRequest } from './request-protection';
 
-declare global {
-  namespace Express {
-    interface Request {
-      currentUser?: { id: string; role: UserRole };
-    }
+declare module 'express' {
+  interface Request {
+    currentUser?: { id: string; role: UserRole };
   }
 }
 type Db = Pick<PrismaClient, 'user'>;

@@ -15,18 +15,12 @@ export function issueCsrf(res: Response, secret: string): string {
 
 /** Validate exact origin and signed double-submit cookie/header values. */
 export function validWriteRequest(req: Request, secret: string): boolean {
-  const origin = req.get('origin');
-  if (!origin || !process.env.APP_ORIGIN || origin !== process.env.APP_ORIGIN) {
-    return false;
-  }
+  if (!validOrigin(req)) return false;
   const header = req.get('x-csrf-token');
   const cookie = readCookie(req, COOKIE);
-  if (!header || !cookie || header !== cookie) return false;
-  const [nonce, signature, extra] = cookie.split('.');
-  if (!nonce || !signature || extra) return false;
-  const left = Buffer.from(signature);
-  const right = Buffer.from(sign(nonce, secret));
-  return left.length === right.length && timingSafeEqual(left, right);
+  return Boolean(
+    header && cookie && header === cookie && validSignature(cookie, secret),
+  );
 }
 
 /** Keep the pre-auth token unavailable to scripts and cross-site requests. */
@@ -58,4 +52,20 @@ function readCookie(req: Request, name: string): string | null {
 
 function sign(value: string, secret: string): string {
   return createHmac('sha256', secret).update(value).digest('base64url');
+}
+
+/** Require the configured exact site origin. */
+function validOrigin(req: Request): boolean {
+  const origin = req.get('origin');
+  const expected = process.env.APP_ORIGIN;
+  return Boolean(origin && expected && origin === expected);
+}
+
+/** Verify a well-formed token signature using constant-time comparison. */
+function validSignature(token: string, secret: string): boolean {
+  const [nonce, signature, extra] = token.split('.');
+  if (!nonce || !signature || extra) return false;
+  const actual = Buffer.from(signature);
+  const expected = Buffer.from(sign(nonce, secret));
+  return actual.length === expected.length && timingSafeEqual(actual, expected);
 }
