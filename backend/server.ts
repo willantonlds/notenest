@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import { createApp } from './app';
 import { loadConfig } from './config';
@@ -18,9 +19,7 @@ async function main(): Promise<void> {
 }
 
 main().catch((error: unknown) => {
-  console.error(
-    'API failed to start.',
-    error instanceof Error ? error.message : '',
-  );
+  void error;
+  console.error('API failed to start.');
   process.exitCode = 1;
 });
