@@ -2,6 +2,13 @@
 
 One entry per issue, pull request, and released version. Newest first.
 
+## Unreleased
+
+### Issue #23 | docs | Review Sprint 1 work scope
+
+- Record the approved 14-PBI Week 1 selection, estimates, prerequisites, and
+  acceptance limits without replacing existing product or architecture decisions.
+
 ## Versioning
 Pre-1.0 semantic versioning, `v<major>.<minor>.<patch>`:
 - Major (`0`): initial development; breaking changes allowed. A major bump means a breaking change that needs a migration.

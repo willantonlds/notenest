@@ -2,7 +2,16 @@ name: CI
 
 on:
   pull_request:
-    branches: [master]
+    branches:
+      - master
+      - docs/week1-e01-review
+      - feature/week1-e02-postgres
+      - feature/week1-e05-app-shell
+      - feature/week1-e06-sessions
+      - feature/week1-e03-request-protection
+      - chore/week1-e04-quality-gates
+      - feature/week1-s01-register
+      - feature/week1-s02-login
   push:
     branches: [master]
 
