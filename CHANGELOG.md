@@ -4,6 +4,12 @@ One entry per issue, pull request, and released version. Newest first.
 
 ## Unreleased
 
+### Issue #3 | feat | Log out
+
+- Add shared logout and session-guard behavior for the notes placeholder.
+- Revoke the browser session and replace navigation to the public home page.
+
+
 ### Issue #2 | feat | Sign in
 
 - Authenticate with generic credential failures and persistent per-account lockout; establish a server session on successful login.
