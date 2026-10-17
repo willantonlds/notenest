@@ -9,6 +9,12 @@ test('public shell and health are available in Chromium', async ({
   expect(health.status()).toBe(200);
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/');
+  await page.getByRole('link', { name: 'Create an account' }).click();
+  await expect(
+    page.getByRole('heading', { name: 'Create your account' }),
+  ).toBeVisible();
+  await expect(page.getByLabel('Display name')).toBeVisible();
+  await page.goto('/');
   await expect(page.getByRole('main')).toBeVisible();
   await expect(
     page.getByRole('heading', { name: /good notes/i }),

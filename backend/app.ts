@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { errorHandler } from './errors';
 import { createRoutes } from './routes/health';
+import { registrationRoute } from './auth/register-route';
 import { createSessionMiddleware } from './session/middleware';
 import { currentUserMiddleware, protectWrites } from './security/middleware';
 import { issueCsrf } from './security/request-protection';
@@ -23,8 +24,18 @@ export function createApp(
   });
   app.use('/api', currentUserMiddleware(db));
   app.use('/api', protectWrites(csrfSecret));
+  app.use('/api', registrationRoute(db));
   app.use('/api', createRoutes(db));
+  app.use('/api', (_req, res) => res.status(404).json({ error: 'Not found' }));
   app.use(express.static(resolve(process.cwd(), 'dist/frontend')));
+  app.get('*path', (_req, res, next) => {
+    res.sendFile(
+      resolve(process.cwd(), 'dist/frontend/index.html'),
+      (error) => {
+        if (error) next(error);
+      },
+    );
+  });
   app.use(errorHandler);
   return app;
 }

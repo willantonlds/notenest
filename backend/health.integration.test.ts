@@ -19,6 +19,18 @@ describe('database health endpoint', () => {
     expect(await response.json()).toEqual({ status: 'ok', database: 'ok' });
   });
 
+  it('returns JSON for unknown API routes', async () => {
+    const address = server.address();
+    if (!address || typeof address === 'string')
+      throw new Error('Missing server address.');
+    const response = await fetch(
+      `http://127.0.0.1:${address.port}/api/unknown`,
+    );
+    expect(response.status).toBe(404);
+    expect(response.headers.get('content-type')).toContain('application/json');
+    expect(await response.json()).toEqual({ error: 'Not found' });
+  });
+
   it('serves the built public NoteNest shell', async () => {
     const address = server.address();
     if (!address || typeof address === 'string')
