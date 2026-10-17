@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  MEMBER
+  MODERATOR
+}
+
+enum NoteVisibility {
+  PRIVATE
+  PUBLIC
+}
+
+enum ModerationAction {
+  HIDE
+  RESTORE
+}
+
+model User {
+  id           String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  displayName  String            @map("display_name") @db.VarChar(80)
+  email        String            @unique @db.VarChar(254)
+  passwordHash String            @map("password_hash") @db.VarChar(255)
+  role         UserRole          @default(MEMBER)
+  createdAt    DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  sessions     Session[]
+  notes        Note[]
+  events       ModerationEvent[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @db.VarChar(128)
+  userId    String   @map("user_id") @db.Uuid
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  data      Json     @default("{}") @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model Note {
+  id         String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId    String            @map("owner_id") @db.Uuid
+  title      String            @db.VarChar(200)
+  body       String            @default("") @db.Text
+  visibility NoteVisibility    @default(PRIVATE)
+  isHidden   Boolean           @default(false) @map("is_hidden")
+  createdAt  DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  owner      User              @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  events     ModerationEvent[]
+
+  @@index([ownerId, updatedAt(sort: Desc), id], map: "notes_owner_updated_id_idx")
+  @@index([visibility, isHidden, updatedAt(sort: Desc), id], map: "notes_feed_updated_id_idx")
+  @@map("notes")
+}
+
+model ModerationEvent {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  noteId      String           @map("note_id") @db.Uuid
+  moderatorId String           @map("moderator_id") @db.Uuid
+  action      ModerationAction
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz(6)
+  note        Note             @relation(fields: [noteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  moderator   User             @relation(fields: [moderatorId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+
+  @@index([noteId, createdAt(sort: Desc)], map: "moderation_events_note_created_idx")
+  @@index([moderatorId, createdAt(sort: Desc)], map: "moderation_events_moderator_created_idx")
+  @@map("moderation_events")
+}
