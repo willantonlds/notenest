@@ -7,9 +7,11 @@ Requires Docker and pnpm (through corepack).
 ```
 corepack enable
 make up        # start the app and Postgres in Docker
-make verify    # lint, type check, unit and integration tests
+make verify    # lint, type check, and unit tests
 make down      # stop the stack
 ```
+
+For database integration tests, set `TEST_DATABASE_URL` to an isolated `notenest_test` database, then run `pnpm run build && pnpm run test:integration`.
 
 ## Stage scripts (one behavior everywhere)
 - `scripts/verify.sh`: lint, type check, unit and integration tests. Needs `DATABASE_URL`.
@@ -33,9 +35,6 @@ The one source of the deploy token is Fly: `flyctl tokens create deploy -a noten
 - CI: store it once with `gh secret set FLY_API_TOKEN`. GitHub secrets are write-only; the value cannot be read back, so `.env` is never derived from the repo secret.
 - Local: run `flyctl auth login` once (flyctl keeps its own credential), so `deploy.sh` works with no token in `.env`. If you prefer a token for local runs, put `FLY_API_TOKEN` in `.env` (which is gitignored).
 - `.env.example` lists every variable (`DATABASE_URL`, `SESSION_SECRET`, `PORT`); nothing secret is committed.
-
-## Two repositories
-Work is developed in the private repo, and the reviewed result is published to the public class repo.
 
 ## Stand up a new repo
 Install the Probot Settings app so `settings.yml` applies the repo settings, branch protection, labels, and milestones. Push the code, run `bash scripts/setup-hooks.sh`, then configure the board and its workflows in the UI (see [process](process.md)).

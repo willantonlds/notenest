@@ -9,12 +9,15 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --check .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p backend/tsconfig.json && tsc -p frontend/tsconfig.json",
     "test": "vitest run",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
     "db:test": "pnpm run test:integration",
-    "test:integration": "node scripts/run-integration-tests.mjs"
+    "test:integration": "node scripts/run-integration-tests.mjs",
+    "dev": "concurrently \"vite --config vite.config.ts --host 127.0.0.1\" \"tsx watch backend/server.ts\"",
+    "build": "vite build && tsc -p backend/tsconfig.json && tsc -p frontend/tsconfig.json && esbuild backend/server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js",
+    "start": "node dist/server.js"
   },
   "devDependencies": {
     "@types/node": "^24",
@@ -23,10 +26,22 @@
     "prisma": "^6.19.0",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.13.0",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.4",
+    "@types/express": "^5.0.3",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.5.2",
+    "concurrently": "^9.1.2",
+    "esbuild": "^0.25.5",
+    "tsx": "^4.20.3",
+    "vite": "^6.3.5"
   },
   "packageManager": "pnpm@9.15.9",
   "dependencies": {
-    "@prisma/client": "^6.19.0"
+    "@prisma/client": "^6.19.0",
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2"
   }
 }
